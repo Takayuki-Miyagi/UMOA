@@ -145,8 +145,7 @@ program UMOAMain
   end if
 
   call sol_umoa%release_hamiltonian()
-
-  if(p%Ops(1) /= 'none' .or. p%Ops(1) /= '') then
+  if(p%Ops(1) /= 'none' .and. p%Ops(1) /= '') then
     write(*,"(a)") "## Calculation for expectation values"
   end if
 
@@ -159,7 +158,6 @@ program UMOAMain
     write(*,"(2a,f18.8)") trim(p%Ops(n)), ": ", op%zero
     call op%fin()
   end do
-
   call sol_umoa%fin()
 
   select case(p%basis)

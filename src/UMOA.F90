@@ -137,7 +137,7 @@ contains
       call print_iteration_spe(this, ite, unit_spe)
       call one_particle_one_hole_decoupling(this)
       call two_particle_two_hole_decoupling(this)
-      if(this%rank == 3) then
+      if(this%rank == 3 .and. this%h%ms%is_three_body) then
         call three_particle_three_hole_decoupling(this)
       end if
       call get_auxiliary_fields(this)
@@ -165,13 +165,13 @@ contains
     type(OneBodyPart) :: w1from2, w1from3
     type(TwoBodyPart) :: w2from3
 
-    if(this%rank == 3) then
+    if(this%rank == 3 .and. this%h%ms%is_three_body) then
       w2from3 = this%h%thr%NormalOrderingFrom3To2(this%h%ms%two)
       w1from3 = w2from3%NormalOrderingFrom2To1(this%h%ms%one)
     end if
     w1from2  = this%h%two%NormalOrderingFrom2To1(this%h%ms%one)
     this%Wop%one = w1from2
-    if(this%rank == 3) then
+    if(this%rank == 3 .and. this%h%ms%is_three_body) then
       this%Wop%two = w2from3
       this%Wop%one = this%Wop%one - w1from3 * 0.5d0
     end if
@@ -180,7 +180,7 @@ contains
     this%e1 = this%h0%one%NormalOrderingFrom1To0() + &
         & this%Wop%one%NormalOrderingFrom1To0()
     this%e2 = - w1from2%NormalOrderingFrom1To0() * 0.5d0
-    if(this%rank == 3) then
+    if(this%rank == 3 .and. this%h%ms%is_three_body) then
       this%e3 = w1from3%NormalOrderingFrom1To0() / 6.d0
     end if
     this%etot = this%e0 + this%e1 + this%e2 + this%e3
@@ -396,7 +396,7 @@ contains
     this%e2 = - Wop%one%NormalOrderingFrom1To0() * 0.5d0
     call Wop%two%fin()
     call Wop%two%init(h%ms%two,.true.,"W",0,1,0)
-    if(this%rank == 3) then
+    if(this%rank == 3 .and. this%h%ms%is_three_body) then
       Wop%two = h%thr%NormalOrderingFrom3To2(h%ms%two)
       w1from3 = Wop%two%NormalOrderingFrom2To1(h%ms%one)
       Wop%one = Wop%one - w1from3 * 0.5d0
@@ -440,7 +440,8 @@ contains
     !do ch = 1, Wop%ms%two%NChan
     !  Wop%two%MatCh(ch,ch)%m = 0.d0
     !end do
-    return
+    if(this%rank == 2) return
+    if(.not. this%h%ms%is_three_body) return
 
     do ch = 1, Wop%ms%two%NChan
       tbs => Wop%ms%two%jpz(ch)
