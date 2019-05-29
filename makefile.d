@@ -17,7 +17,7 @@ obj/ClassSys.o : submodule/HartreeFock/src/ClassSys.f90
 obj/ThreeBodyInteraction.o : submodule/HartreeFock/src/ThreeBodyInteraction.F90 obj/TwoBodyOperator.o obj/LinAlgLib.o obj/ClassSys.o obj/MyLibrary.o obj/ThreeBodyModelSpace.o obj/SingleParticleState.o obj/Profiler.o 
 obj/Operators.o : submodule/HartreeFock/src/Operators.F90 obj/Profiler.o obj/DefineOperators.o obj/ThreeBodyInteraction.o obj/ThreeBodyOperator.o obj/TwoBodyOperator.o obj/OneBodyOperator.o obj/ModelSpace.o 
 obj/Profiler.o : submodule/HartreeFock/src/Profiler.F90 obj/MPIFunction.o obj/ClassSys.o 
-obj/MBPT.o : submodule/HartreeFock/src/MBPT.F90 obj/MyLibrary.o obj/Profiler.o obj/StoreCouplings.o obj/Operators.o obj/ModelSpace.o 
+obj/HFMBPT.o : submodule/HartreeFock/src/HFMBPT.F90 obj/MyLibrary.o obj/Profiler.o obj/HartreeFock.o obj/StoreCouplings.o obj/Operators.o obj/ModelSpace.o 
 obj/ThreeBodyModelSpace.o : submodule/HartreeFock/src/ThreeBodyModelSpace.F90 obj/MyLibrary.o obj/LinAlgLib.o obj/SingleParticleState.o 
 obj/MPIFunction.o : submodule/HartreeFock/src/MPIFunction.F90 
 obj/ModelSpace.o : submodule/HartreeFock/src/ModelSpace.F90 obj/MyLibrary.o obj/Profiler.o obj/ClassSys.o obj/ThreeBodyModelSpace.o obj/TwoBodyModelSpace.o obj/OneBodyModelSpace.o obj/SingleParticleState.o 

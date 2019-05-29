@@ -37,18 +37,17 @@ contains
     this%filename = "op.out"
   end subroutine InitWriteFiles
 
-  subroutine SetFileName(this, outdir, file_format, op)
+  subroutine SetFileName(this, outdir, file_format, basis, op)
     use ClassSys, only: sys
     class(WriteFiles), intent(inout) :: this
-    character(*), intent(in) :: outdir
-    character(*), intent(in) :: file_format
+    character(*), intent(in) :: outdir, file_format, basis
     type(Ops), intent(in) :: op
     type(MSpace), pointer :: ms
     type(sys) :: s
 
     ms => op%ms
     this%filename = trim(outdir) // "/" // trim(op%oprtr) // '_' // trim(ms%Nucl) // &
-        & '_UMOA_hw' // trim(s%str(ms%hw)) // &
+        & '_' // trim(basis) // '_hw' // trim(s%str(ms%hw)) // &
         & '_e' // trim(s%str(this%emax))
     if(abs(this%beta) > 1.d-3) then
       this%filename = trim(this%filename) // "_beta" // trim(s%str(this%beta))

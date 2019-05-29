@@ -8,7 +8,7 @@
 TARGET=UMOA
 INSTLDIR=$(HOME)/bin
 EXEDIR=$(PWD)/exe
-MODDIR = src
+MODDIR = main
 MPI=off
 Host= $(shell if hostname|grep -q apt1; then echo apt; \
   elif hostname|grep -q oak; then echo oak; \
