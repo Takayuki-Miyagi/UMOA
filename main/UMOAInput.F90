@@ -8,9 +8,13 @@ module UMOAInput
   type :: InputParameters
     integer :: umoa_rank
     integer :: emax
-    integer :: lmax
     integer :: e2max
     integer :: e3max
+    integer :: lmax
+    integer :: e_umoa
+    integer :: e2_umoa
+    integer :: e3_umoa
+    integer :: l_umoa
     real(8) :: hw
     real(8) :: beta_cm
     real(8) :: alpha
@@ -61,6 +65,10 @@ contains
     integer :: e2max=-1
     integer :: e3max=-1
     integer :: lmax=-1
+    integer :: e_umoa = -1
+    integer :: e2_umoa = -1
+    integer :: e3_umoa = -1
+    integer :: l_umoa = -1
     real(8) :: hw=20.d0
     real(8) :: beta_cm = 0.d0 ! lowson's cm parameter, H => H + beta_cm * (hw/A) * Hcm
     real(8) :: alpha=0.7d0
@@ -105,7 +113,7 @@ contains
         & beta_cm, out_dir, basis, &
         & Op_file_format, S1_is_0, S2_is_0, S3_is_0, &
         & X1_is_0, X2_is_0, X3_is_0, Core, valence_list, &
-        & is_NO2B
+        & is_NO2B, e_umoa, e2_umoa, e3_umoa, l_umoa
 
     open(118, file=inputfile, action='read', iostat=io)
     if(io /= 0) then
@@ -118,9 +126,10 @@ contains
     this%umoa_rank = umoa_rank
     this%emax = emax
     this%e2max = e2max
-    if(e2max == -1) this%e2max = 2*emax
     this%e3max = e3max
-    if(e3max == -1) this%e3max = 3*emax
+    this%e_umoa = e_umoa
+    this%e2_umoa = e2_umoa
+    this%e3_umoa = e3_umoa
     this%hw = hw
     this%alpha = alpha
     this%Nucl = Nucl
@@ -138,6 +147,7 @@ contains
     this%e3max_3n = e3max_3n
 
     this%lmax = lmax
+    this%l_umoa = l_umoa
     this%lmax_nn = lmax_nn
     this%lmax_3n = lmax_3n
 
@@ -157,7 +167,15 @@ contains
     this%Op_file_format = Op_file_format
     this%beta_cm = beta_cm
 
+    if(e2max == -1) this%e2max = 2*emax
+    if(e3max == -1) this%e3max = 3*emax
     if(lmax == -1) this%lmax = emax
+
+    if(e_umoa == -1) this%e_umoa = this%emax
+    if(e2_umoa == -1) this%e2_umoa = this%e2max
+    if(e3_umoa == -1) this%e3_umoa = this%e3max
+    if(l_umoa == -1) this%l_umoa = this%lmax
+
     if(lmax_nn == -1) this%lmax_nn = emax_nn
     if(lmax_3n == -1) this%lmax_3n = emax_3n
 
@@ -177,9 +195,12 @@ contains
 
     write(iut,'(a)') "######  Input parameters  ####  "
     write(iut,'(2a)') "#  Target nuclide is ", trim(this%Nucl)
-    write(iut,'(a,i3,a,i3,a,i3,a,i3)') "#  Model space: emax =", &
+    write(iut,'(a,i3,a,i3,a,i3,a,i3)') "#  Original model space: emax =", &
         & this%emax, ", e2max =", this%e2max, &
         & ", e3max =", this%e3max, ", lmax =", this%lmax
+    write(iut,'(a,i3,a,i3,a,i3,a,i3)') "#      UMOA model space: emax =", &
+        & this%e_umoa, ", e2max =", this%e2_umoa, &
+        & ", e3max =", this%e3_umoa, ", lmax =", this%l_umoa
     write(iut,'(a,f8.3,a)') "#  HO basis parameter hw = ", this%hw, " MeV"
 
     write(iut,'(a)') "#"
